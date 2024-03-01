@@ -61,18 +61,20 @@ const safeDOM = {
 function useLoading() {
   const className = "loaders-css__square-spin";
   const styleContent = `
-@keyframes square-spin {
-  25% { transform: perspective(100px) rotateX(180deg) rotateY(0); }
-  50% { transform: perspective(100px) rotateX(180deg) rotateY(180deg); }
-  75% { transform: perspective(100px) rotateX(0) rotateY(180deg); }
-  100% { transform: perspective(100px) rotateX(0) rotateY(0); }
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
-.${className} > div {
+.${className} {
   animation-fill-mode: both;
-  width: 50px;
-  height: 50px;
-  background: #fff;
-  animation: square-spin 3s 0s cubic-bezier(0.09, 0.57, 0.49, 0.9) infinite;
+  width: 80px;
+  height: 80px;
+  color: hsl(217.2, 91.2%, 59.8%);
+  animation: spin 1s linear infinite;
 }
 .app-loading-wrap {
   position: fixed;
@@ -83,7 +85,7 @@ function useLoading() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #282c34;
+  background: hsl(240, 10%, 3.9%);
   z-index: 9;
 }
     `;
@@ -93,7 +95,7 @@ function useLoading() {
   oStyle.id = "app-loading-style";
   oStyle.innerHTML = styleContent;
   oDiv.className = "app-loading-wrap";
-  oDiv.innerHTML = `<div class="${className}"><div></div></div>`;
+  oDiv.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
 
   return {
     appendLoading() {
