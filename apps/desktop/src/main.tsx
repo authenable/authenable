@@ -8,6 +8,7 @@ import {
 import "./index.css";
 import { routeTree } from "./routeTree.gen";
 import { ClerkProvider } from "@clerk/clerk-react";
+import { ThemeProvider } from "@/components/themes";
 
 const memoryHistory = createMemoryHistory({
   initialEntries: ["/"],
@@ -35,7 +36,9 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-        <RouterProvider router={router} />
+        <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </ClerkProvider>
     </StrictMode>,
   );

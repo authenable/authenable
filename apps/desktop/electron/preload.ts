@@ -52,6 +52,27 @@ const safeDOM = {
   },
 };
 
+type Theme = "light" | "dark" | "system";
+
+function useTheme() {
+  const theme = (localStorage.getItem("vite-ui-theme") as Theme) || "system";
+  const root = window.document.documentElement;
+
+  root.classList.remove("light", "dark");
+
+  if (theme === "system") {
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
+      ? "dark"
+      : "light";
+
+    root.classList.add(systemTheme);
+    return;
+  }
+
+  root.classList.add(theme);
+}
+
 /**
  * https://tobiasahlin.com/spinkit
  * https://connoratherton.com/loaders
@@ -69,11 +90,19 @@ function useLoading() {
     transform: rotate(360deg);
   }
 }
+:root {
+  --background: 0 0% 100%;
+  --primary: 221.2 83.2% 53.3%;
+}
+.dark {
+  --background: 240 10% 3.9%;
+  --primary: 217.2 91.2% 59.8%;
+}
 .${className} {
   animation-fill-mode: both;
   width: 80px;
   height: 80px;
-  color: hsl(217.2, 91.2%, 59.8%);
+  color: hsl(var(--primary));
   animation: spin 1s linear infinite;
 }
 .app-loading-wrap {
@@ -85,7 +114,7 @@ function useLoading() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: hsl(240, 10%, 3.9%);
+  background: hsl(var(--background));
   z-index: 9;
 }
     `;
@@ -111,8 +140,13 @@ function useLoading() {
 
 // ----------------------------------------------------------------------
 
+// eslint-disable-next-line react-hooks/rules-of-hooks
 const { appendLoading, removeLoading } = useLoading();
-domReady().then(appendLoading);
+domReady().then(() => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useTheme();
+  appendLoading();
+});
 
 window.onmessage = (ev) => {
   ev.data.payload === "removeLoading" && removeLoading();

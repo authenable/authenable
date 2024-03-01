@@ -24,4 +24,9 @@ export default defineConfig({
     }),
     TanStackRouterVite(),
   ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
 });
