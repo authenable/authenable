@@ -1,3 +1,8 @@
+import "@fontsource/geist-sans/400.css";
+import "@fontsource/geist-sans/500.css";
+import "@fontsource/geist-sans/700.css";
+import "./index.css";
+
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import {
@@ -5,7 +10,6 @@ import {
   createMemoryHistory,
   createRouter,
 } from "@tanstack/react-router";
-import "./index.css";
 import { routeTree } from "./routeTree.gen";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { ThemeProvider } from "@/components/themes";
