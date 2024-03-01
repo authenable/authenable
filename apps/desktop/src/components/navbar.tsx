@@ -52,7 +52,7 @@ function UserDropdown({ user }: { user: UserResource }) {
           </div>
         )}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40">
+      <DropdownMenuContent className="w-40" align="end">
         <DropdownMenuLabel className="flex flex-col space-y-1 font-normal">
           <p className="font-semibold leading-none truncate">
             {user.firstName}
