@@ -1,7 +1,6 @@
 import { ModeToggle } from "@/components/themes";
 import Logo from "@/components/logo";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { Link } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,20 +10,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { UserResource } from "@clerk/types";
-import { AppWindow, LogOut, UserIcon } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 export default function Navbar() {
   const { user } = useUser();
 
   return (
     <nav className="flex items-center justify-between px-4 py-3 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-muted">
-      <Link
-        to="/"
-        className="flex items-center gap-1 hover:opacity-75 transition-all text-primary"
-      >
+      <div className="flex items-center gap-1 text-primary">
         <Logo width={32} height={32} />
         <p className="text-xl font-bold tracking-tighter">authenable</p>
-      </Link>
+      </div>
       <div className="flex items-center gap-2">
         <ModeToggle />
         {user ? <UserDropdown user={user} /> : null}
@@ -71,17 +67,7 @@ function UserDropdown({ user }: { user: UserResource }) {
           </p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex items-center gap-1.5">
-          <UserIcon className="w-4 h-4" /> Profile
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="flex items-center gap-1.5">
-          <Link href="/apps">
-            <AppWindow className="w-4 h-4" /> Apps
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem
-          asChild
           onClick={() => signOut()}
           className="flex items-center gap-1.5"
         >
