@@ -13,12 +13,16 @@ import {
 import { routeTree } from "./routeTree.gen";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { ThemeProvider } from "@/components/themes";
+import { Toaster } from "@/components/ui/sonner";
 
 const memoryHistory = createMemoryHistory({
   initialEntries: ["/"],
 });
 
-const router = createRouter({ routeTree, history: memoryHistory });
+const router = createRouter({
+  routeTree,
+  history: memoryHistory,
+});
 
 declare module "@tanstack/react-router" {
   interface Register {
@@ -42,6 +46,7 @@ if (!rootElement.innerHTML) {
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
         <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
           <RouterProvider router={router} />
+          <Toaster richColors />
         </ThemeProvider>
       </ClerkProvider>
     </StrictMode>,
