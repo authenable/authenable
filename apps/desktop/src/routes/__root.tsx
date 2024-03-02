@@ -40,7 +40,9 @@ export const Route = createRootRoute({
     return (
       <>
         <Navbar />
-        <Outlet />
+        <main className="flex-grow">
+          <Outlet />
+        </main>
       </>
     );
   },

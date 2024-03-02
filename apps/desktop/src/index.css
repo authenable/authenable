@@ -54,6 +54,9 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen flex flex-col;
+  }
+  #root {
+    @apply flex-grow flex flex-col;
   }
 }

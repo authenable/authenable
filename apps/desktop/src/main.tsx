@@ -14,6 +14,9 @@ import { routeTree } from "./routeTree.gen";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { ThemeProvider } from "@/components/themes";
 import { Toaster } from "@/components/ui/sonner";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const memoryHistory = createMemoryHistory({
   initialEntries: ["/"],
@@ -44,10 +47,12 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-        <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-          <RouterProvider router={router} />
-          <Toaster richColors />
-        </ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+            <RouterProvider router={router} />
+            <Toaster richColors />
+          </ThemeProvider>
+        </QueryClientProvider>
       </ClerkProvider>
     </StrictMode>,
   );
