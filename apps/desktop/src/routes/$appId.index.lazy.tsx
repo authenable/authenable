@@ -10,7 +10,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { platforms } from "@/lib/platforms";
 import Logo from "@/components/logo";
 
-export const Route = createLazyFileRoute("/$appId")({
+export const Route = createLazyFileRoute("/$appId/")({
   component: AppPage,
 });
 
@@ -19,7 +19,7 @@ function AppPage() {
   const { getToken } = useAuth();
 
   const { isLoading, data: app } = useQuery({
-    queryKey: ["app", { id: appId }],
+    queryKey: ["appWithToken", { id: appId }],
     queryFn: async (): Promise<Omit<App, "token"> & { token: string }> => {
       const appRes = await fetch(
         `${import.meta.env.VITE_API_URL}/api/getApp/${appId}`,
@@ -55,7 +55,7 @@ function AppPage() {
 
   if (isLoading)
     return (
-      <div className="flex flex-col  flex-grow items-center justify-center">
+      <div className="flex flex-col flex-grow items-center justify-center">
         <Link
           to="/"
           className={buttonVariants({
