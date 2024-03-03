@@ -14,26 +14,43 @@ export const Route = createLazyFileRoute("/$appId")({
   component: AppPage,
 });
 
-interface Token {
-  userId: string;
-  token: string;
-}
-
 function AppPage() {
   const { appId } = Route.useParams();
   const { getToken } = useAuth();
 
   const { isLoading, data: app } = useQuery({
     queryKey: ["app", { id: appId }],
-    queryFn: async (): Promise<App & { decodedToken: Token }> =>
-      fetch(`${import.meta.env.VITE_API_URL}/api/getApp/${appId}`, {
-        headers: {
-          Authorization: `Bearer ${await getToken()}`,
+    queryFn: async (): Promise<Omit<App, "token"> & { token: string }> => {
+      const appRes = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/getApp/${appId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
         },
-      }).then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch");
-        return res.json();
-      }),
+      );
+      if (!appRes.ok) throw new Error("Failed to fetch app");
+      const app = await appRes.json();
+
+      const tokenRes = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/decodeToken`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+          method: "POST",
+          body: JSON.stringify({ token: app.token }),
+        },
+      );
+      if (!tokenRes.ok) throw new Error("Failed to fetch decoded token");
+      const token = await tokenRes.json();
+
+      return {
+        ...app,
+        token: token.token,
+      };
+    },
   });
 
   if (isLoading)
@@ -93,7 +110,7 @@ function AppPage() {
         <Logo width={80} height={80} className="text-primary" />
       )}
       <h1 className="text-2xl font-semibold tracking-tight">{app.name}</h1>
-      <TOTP token={app.decodedToken.token} />
+      <TOTP token={app.token} />
     </div>
   );
 }
