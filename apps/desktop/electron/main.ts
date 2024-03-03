@@ -21,6 +21,7 @@ const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
 
 function createWindow() {
   win = new BrowserWindow({
+    title: "Authenable",
     width: 500,
     height: 800,
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
