@@ -40,7 +40,7 @@ export const Route = createRootRoute({
     return (
       <>
         <Navbar />
-        <main className="flex-grow">
+        <main className="flex-grow flex flex-col">
           <Outlet />
         </main>
       </>
@@ -143,7 +143,7 @@ function SignIn({ switchState }: { switchState: () => void }) {
     setIsLoading(true);
     signIn.authenticateWithRedirect({
       strategy,
-      redirectUrl: "https://authenable.codes/sso-callback",
+      redirectUrl: `${import.meta.env.VITE_API_URL}/sso-callback`,
       redirectUrlComplete: "/",
     });
   };

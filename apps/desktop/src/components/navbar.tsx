@@ -10,19 +10,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { UserResource } from "@clerk/types";
-import { LogOut } from "lucide-react";
+import { LogOut, Plus } from "lucide-react";
+import { buttonVariants } from "./ui/button";
+import { Link } from "@tanstack/react-router";
 
 export default function Navbar() {
   const { user } = useUser();
 
   return (
     <nav className="flex items-center justify-between px-4 py-3 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-muted">
-      <div className="flex items-center gap-1 text-primary">
+      <Link
+        to="/"
+        className="hover:opacity-75 transition-all flex items-center gap-1 text-primary"
+      >
         <Logo width={32} height={32} />
         <p className="text-xl font-bold tracking-tighter">authenable</p>
-      </div>
+      </Link>
       <div className="flex items-center gap-2">
         <ModeToggle />
+        <Link
+          to="/create"
+          className={buttonVariants({
+            variant: "outline",
+            size: "icon",
+            className: "h-9 w-9",
+          })}
+        >
+          <Plus className="w-5 h-5" />
+        </Link>
         {user ? <UserDropdown user={user} /> : null}
       </div>
     </nav>
