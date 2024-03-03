@@ -38,7 +38,17 @@ function AppPage() {
 
   if (isLoading)
     return (
-      <div className="flex flex-col items-center justify-center flex-grow">
+      <div className="flex flex-col  flex-grow items-center justify-center">
+        <Link
+          to="/"
+          className={buttonVariants({
+            variant: "ghost",
+            className:
+              "absolute top-[calc(1rem+61px)] left-4 flex items-center gap-1",
+          })}
+        >
+          <ArrowLeft className="w-5 h-5" /> Apps
+        </Link>
         <Loader2 className="w-20 h-20 animate-spin text-primary" />
       </div>
     );
@@ -46,7 +56,7 @@ function AppPage() {
   if (!app) return null;
 
   return (
-    <div className="flex flex-col gap-3 flex-grow items-center justify-center w-full max-w-xl mx-auto">
+    <div className="flex flex-col gap-3 flex-grow items-center justify-center">
       <Link
         to="/"
         className={buttonVariants({
