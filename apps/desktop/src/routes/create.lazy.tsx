@@ -110,7 +110,7 @@ function CreateApp() {
       name: values.name,
       token: values.token,
       platform: values.platform,
-      iconUrl: null as string | null,
+      iconUrl: undefined as never as string | null,
     };
     if (files.length > 0) {
       const uploads = await startUpload(files);
