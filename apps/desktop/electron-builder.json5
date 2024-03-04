@@ -3,9 +3,9 @@
  */
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
+  "appId": "codes.authenable.desktop",
   "asar": true,
-  "productName": "YourAppName",
+  "productName": "Authenable",
   "directories": {
     "output": "release/${version}"
   },
@@ -38,7 +38,12 @@
   },
   "linux": {
     "target": [
-      "AppImage"
+      "AppImage",
+      "deb",
+      "rpm"
+    ], 
+    "asarUnpack": [
+      "**/node_modules/sharp/**"
     ],
     "artifactName": "${productName}-Linux-${version}.${ext}"
   }

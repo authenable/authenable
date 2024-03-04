@@ -1,5 +1,9 @@
 {
   "name": "@authenable/desktop",
+  "description": "The 2FA app for the modern era.",
+  "homepage": "https://authenable.codes",
+  "license": "MIT",
+  "author": "Authenable Labs <hey@authenable.codes>",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -62,8 +66,7 @@
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vite-plugin-electron": "^0.14.0",
-    "vite-plugin-electron-renderer": "^0.14.5",
-    "vite-plugin-node-polyfills": "^0.21.0"
+    "vite-plugin-electron-renderer": "^0.14.5"
   },
   "main": "dist-electron/main.js"
 }

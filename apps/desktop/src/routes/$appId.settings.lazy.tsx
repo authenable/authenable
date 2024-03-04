@@ -14,7 +14,7 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { useDropzone } from "@uploadthing/react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import type { GetToken } from "@clerk/types";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -47,14 +47,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { formatBytes } from "@/lib/bytes";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { cn } from "@/lib/utils";
@@ -499,14 +501,10 @@ function UpdateAppForm({ app, getToken }: { app: App; getToken: GetToken }) {
 }
 
 function DeleteApp({ app, getToken }: { app: App; getToken: GetToken }) {
-  const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   async function onClick() {
-    setIsLoading(true);
-
     await fetch(`${import.meta.env.VITE_API_URL}/api/deleteApp`, {
       method: "DELETE",
       headers: {
@@ -531,38 +529,32 @@ function DeleteApp({ app, getToken }: { app: App; getToken: GetToken }) {
         fontFamily: "var(--font-geist-sans)",
       },
     });
-
-    setOpen(false);
-    setIsLoading(false);
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
+    <AlertDialog>
+      <AlertDialogTrigger>
         <Button variant="destructive">Delete</Button>
-      </DialogTrigger>
-      <DialogContent disableXIcon className="w-full max-w-md mx-auto">
-        <DialogHeader>
-          <DialogTitle>Are you sure you want to delete this app?</DialogTitle>
-          <DialogDescription>This action cannot be undone.</DialogDescription>
-        </DialogHeader>
-        <DialogFooter className="gap-2 sm:space-x-0">
-          <Button
-            variant="outline"
-            onClick={() => setOpen(false)}
-            disabled={isLoading}
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Are you sure you want to delete this app?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="gap-2 sm:space-x-0">
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className={buttonVariants({ variant: "destructive" })}
+            onClick={onClick}
           >
-            Cancel
-          </Button>
-          <Button variant="destructive" onClick={onClick} disabled={isLoading}>
-            {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              "Delete app"
-            )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+            Delete app
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
