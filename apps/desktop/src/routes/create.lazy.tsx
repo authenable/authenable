@@ -233,7 +233,7 @@ function CreateApp() {
                   <PopoverContent className="w-[200px] p-0">
                     <Command>
                       <CommandInput placeholder="Search platform..." />
-                      <ScrollArea className="h-96">
+                      <ScrollArea className="h-80">
                         <CommandEmpty>No platform found.</CommandEmpty>
                         <CommandGroup>
                           <CommandItem
