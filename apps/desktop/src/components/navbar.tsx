@@ -84,7 +84,7 @@ function UserDropdown({ user }: { user: UserResource }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => signOut()}
-          className="flex items-center gap-1.5"
+          className="flex items-center gap-1.5 text-red-500"
         >
           <LogOut className="w-4 h-4" /> Sign out
         </DropdownMenuItem>
