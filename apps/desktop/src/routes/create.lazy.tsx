@@ -42,6 +42,8 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { useCallback, useState } from "react";
 import { formatBytes } from "@/lib/bytes";
 import { useQueryClient } from "@tanstack/react-query";
+import { customAlphabet } from "nanoid";
+import { numbers, lowercase } from "nanoid-dictionary";
 
 export const Route = createLazyFileRoute("/create")({
   component: CreateApp,
@@ -107,6 +109,7 @@ function CreateApp() {
     setIsLoading(true);
 
     const options = {
+      id: customAlphabet(numbers + lowercase, 12)(),
       name: values.name,
       token: values.token,
       platform: values.platform,
@@ -117,6 +120,17 @@ function CreateApp() {
       if (!uploads) return;
       options.iconUrl = uploads[0].url;
     }
+
+    let localApps = localStorage.getItem("apps");
+    if (!localApps) {
+      localStorage.setItem("apps", JSON.stringify([]));
+      localApps = JSON.stringify([]);
+    }
+
+    const parsedLocalApps: any[] = JSON.parse(localApps);
+    parsedLocalApps.push(options);
+
+    localStorage.setItem("apps", JSON.stringify(parsedLocalApps));
 
     await fetch(`${import.meta.env.VITE_API_URL}/api/createApp`, {
       method: "POST",

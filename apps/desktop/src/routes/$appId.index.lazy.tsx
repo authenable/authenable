@@ -21,6 +21,14 @@ function AppPage() {
   const { isLoading, data: app } = useQuery({
     queryKey: ["appWithToken", { id: appId }],
     queryFn: async (): Promise<Omit<App, "token"> & { token: string }> => {
+      const localApps = localStorage.getItem("apps");
+      if (localApps) {
+        const localApp = (JSON.parse(localApps) as App[]).find(
+          (app) => app.id === appId,
+        );
+        if (localApp) return localApp;
+      }
+
       const appRes = await fetch(
         `${import.meta.env.VITE_API_URL}/api/getApp/${appId}`,
         {
