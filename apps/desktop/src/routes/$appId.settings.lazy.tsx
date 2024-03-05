@@ -71,15 +71,24 @@ function AppSettings() {
 
   const { isLoading, data: app } = useQuery({
     queryKey: ["app", { id: appId }],
-    queryFn: async (): Promise<App> =>
-      fetch(`${import.meta.env.VITE_API_URL}/api/getApp/${appId}`, {
+    queryFn: async (): Promise<App> => {
+      const localApps = localStorage.getItem("apps");
+      if (localApps) {
+        const localApp = (JSON.parse(localApps) as App[]).find(
+          (app) => app.id === appId,
+        );
+        if (localApp) return localApp;
+      }
+
+      return fetch(`${import.meta.env.VITE_API_URL}/api/getApp/${appId}`, {
         headers: {
           Authorization: `Bearer ${await getToken()}`,
         },
       }).then((res) => {
         if (!res.ok) throw new Error("Failed to fetch");
         return res.json();
-      }),
+      });
+    },
   });
 
   if (isLoading)
@@ -238,6 +247,20 @@ function UpdateAppForm({ app, getToken }: { app: App; getToken: GetToken }) {
       if (!uploads) return;
       options.iconUrl = uploads[0].url;
     }
+
+    let localApps = localStorage.getItem("apps");
+    if (!localApps) {
+      localStorage.setItem("apps", JSON.stringify([]));
+      localApps = JSON.stringify([]);
+    }
+
+    const parsedLocalApps: any[] = JSON.parse(localApps);
+    const appIndex = parsedLocalApps.findIndex(
+      (localApp: any) => localApp.id === app.id,
+    );
+    parsedLocalApps[appIndex] = options;
+
+    localStorage.setItem("apps", JSON.stringify(parsedLocalApps));
 
     await fetch(`${import.meta.env.VITE_API_URL}/api/updateApp`, {
       method: "POST",
@@ -505,6 +528,17 @@ function DeleteApp({ app, getToken }: { app: App; getToken: GetToken }) {
   const navigate = useNavigate();
 
   async function onClick() {
+    let localApps = localStorage.getItem("apps");
+    if (!localApps) {
+      localStorage.setItem("apps", JSON.stringify([]));
+      localApps = JSON.stringify([]);
+    }
+
+    const newApps: any[] = JSON.parse(localApps).filter(
+      (localApp: any) => localApp.id !== app.id,
+    );
+    localStorage.setItem("apps", JSON.stringify(newApps));
+
     await fetch(`${import.meta.env.VITE_API_URL}/api/deleteApp`, {
       method: "DELETE",
       headers: {

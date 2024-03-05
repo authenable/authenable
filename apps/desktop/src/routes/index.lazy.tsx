@@ -21,15 +21,42 @@ function Index() {
 
   const { isLoading, data: apps } = useQuery({
     queryKey: ["apps"],
-    queryFn: async (): Promise<App[]> =>
-      fetch(`${import.meta.env.VITE_API_URL}/api/getApps`, {
+    queryFn: async (): Promise<App[]> => {
+      const localApps = localStorage.getItem("apps");
+      if (localApps) return JSON.parse(localApps);
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/getApps`, {
         headers: {
           Authorization: `Bearer ${await getToken()}`,
         },
-      }).then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch");
-        return res.json();
-      }),
+      });
+      if (!res.ok) throw new Error("Failed to fetch apps");
+      const data = await res.json();
+
+      const decodedTokensRes = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/decodeTokens`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+          method: "POST",
+          body: JSON.stringify({
+            tokens: data.map((app: App) => app.token),
+          }),
+        },
+      );
+      if (!res.ok) throw new Error("Failed to decode tokens");
+      const decodedTokens = await decodedTokensRes.json();
+
+      const apps = data.map((app: App) => ({
+        ...app,
+        token: decodedTokens.find((token: { id: string }) => token.id).token,
+      }));
+
+      localStorage.setItem("apps", JSON.stringify(apps));
+      return data;
+    },
   });
 
   if (isLoading)
